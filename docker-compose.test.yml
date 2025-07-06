@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - test_db:/var/lib/mysql
+
+  redis-cache:
+    image: redis:alpine
+
+  redis-queue:
+    image: redis:alpine
+
+  redis-socketio:
+    image: redis:alpine
+
+  onefm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+      - redis-cache
+      - redis-queue
+      - redis-socketio
+    environment:
+      SITE_NAME: onefm.local
+      DB_ROOT_PASSWORD: root
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./sites:/home/frappe/frappe-bench/sites
+      - ./apps:/home/frappe/frappe-bench/apps
+    command: bench --site onefm.local run-tests
+
+volumes:
+  test_db:
