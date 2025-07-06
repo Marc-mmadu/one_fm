@@ -31,7 +31,6 @@ services:
       DB_ROOT_PASSWORD: root
       ADMIN_PASSWORD: admin
     volumes:
-      - ./sites:/home/frappe/frappe-bench/sites
       - ./apps:/home/frappe/frappe-bench/apps
     command: bench --site onefm.local run-tests
 
