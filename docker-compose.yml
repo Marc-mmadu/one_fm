@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mariadb-data:/var/lib/mysql
+
+  redis-cache:
+    image: redis:alpine
+    container_name: redis-cache
+    restart: unless-stopped
+
+  redis-queue:
+    image: redis:alpine
+    container_name: redis-queue
+    restart: unless-stopped
+
+  redis-socketio:
+    image: redis:alpine
+    container_name: redis-socketio
+    restart: unless-stopped
+
+  onefm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: onefm-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mariadb
+      - redis-cache
+      - redis-queue
+      - redis-socketio
+    environment:
+      SITE_NAME: onefm.local
+      DB_ROOT_PASSWORD: root
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./sites:/home/frappe/frappe-bench/sites
+      - ./apps:/home/frappe/frappe-bench/apps
