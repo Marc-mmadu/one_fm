@@ -3,6 +3,9 @@ set -e
 
 cd /home/frappe/frappe-bench
 
+# 🔐 Fix ownership for mounted sites folder (important in CI)
+chown -R frappe:frappe sites || true
+
 # Ensure sites directory and apps.txt exist
 mkdir -p sites
 touch sites/apps.txt
