@@ -1,4 +1,3 @@
-
 version: "3.9"
 
 services:
@@ -31,10 +30,7 @@ services:
       SITE_NAME: onefm.local
       DB_ROOT_PASSWORD: root
       ADMIN_PASSWORD: admin
-    volumes:
-      # Don't mount apps (they already exist in the base image + you clone one_fm inside Dockerfile)
-# This avoids permission conflicts entirely.
-
+    volumes: []  # ✅ fixed: empty list is valid YAML
     command: /home/frappe/entrypoint.sh
 
 volumes:
