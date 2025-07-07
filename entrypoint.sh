@@ -32,8 +32,11 @@ if [ ! -d "sites/${SITE_NAME}" ]; then
     --admin-password "${ADMIN_PASSWORD}" \
     --no-mariadb-socket
 
-  bench --site "${SITE_NAME}" install-app erpnext
-  bench --site "${SITE_NAME}" install-app one_fm
+  echo "📦 Installing erpnext..."
+  bench --site "${SITE_NAME}" install-app erpnext || { echo "❌ Failed to install erpnext"; exit 1; }
+
+  echo "📦 Installing one_fm..."
+  bench --site "${SITE_NAME}" install-app one_fm || { echo "❌ Failed to install one_fm"; exit 1; }
 fi
 
 echo "✅ Running tests..."
