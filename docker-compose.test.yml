@@ -1,4 +1,23 @@
+
+version: "3.9"
+
 services:
+  mariadb:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - test_db:/var/lib/mysql
+
+  redis-cache:
+    image: redis:alpine
+
+  redis-queue:
+    image: redis:alpine
+
+  redis-socketio:
+    image: redis:alpine
+
   onefm:
     build:
       context: .
@@ -15,3 +34,6 @@ services:
     volumes:
       - ./apps:/home/frappe/frappe-bench/apps
     command: /home/frappe/entrypoint.sh
+
+volumes:
+  test_db:
