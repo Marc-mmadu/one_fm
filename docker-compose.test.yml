@@ -32,7 +32,9 @@ services:
       DB_ROOT_PASSWORD: root
       ADMIN_PASSWORD: admin
     volumes:
-      - ./apps:/home/frappe/frappe-bench/apps
+      # Don't mount apps (they already exist in the base image + you clone one_fm inside Dockerfile)
+# This avoids permission conflicts entirely.
+
     command: /home/frappe/entrypoint.sh
 
 volumes:
