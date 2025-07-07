@@ -3,17 +3,28 @@ set -e
 
 cd /home/frappe/frappe-bench
 
-# Create blank bench if missing
-mkdir -p sites
-mkdir -p apps
-touch sites/apps.txt
+# Manually link frappe and erpnext if missing
+if [ ! -d "apps/frappe" ]; then
+  echo "🔗 Linking frappe"
+  ln -s ../frappe apps/frappe
+fi
 
-# Ensure apps.txt includes all required apps
+if [ ! -d "apps/erpnext" ]; then
+  echo "🔗 Linking erpnext"
+  ln -s ../erpnext apps/erpnext
+fi
+
+# Prepare bench state
+mkdir -p sites
+touch sites/apps.txt
+chmod 664 sites/apps.txt
+
+# Register apps
 for app in frappe erpnext one_fm; do
   grep -qxF "$app" sites/apps.txt || echo "$app" >> sites/apps.txt
 done
 
-# Only create site if missing
+# Create site if needed
 if [ ! -d "sites/${SITE_NAME}" ]; then
   echo "🌐 Creating site: ${SITE_NAME}"
   bench new-site "${SITE_NAME}" \
